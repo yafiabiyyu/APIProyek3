@@ -10,9 +10,9 @@ DataSub = api.model(
     "subkriteria",
     {
         "_id": fields.String(readonly=True),
-        "jenis_kriteria": fields.String(
-            required=True, description="Kode dari kriteria"
-        ),
+        # "jenis_kriteria": fields.String(
+        #     required=True, description="Kode dari kriteria"
+        # ),
         "nama_subkriteria": fields.String(
             required=True, description="Nama dari subkriteria"
         ),

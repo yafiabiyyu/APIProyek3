@@ -25,7 +25,7 @@ def create_app(config_name):
     # Options for JWTs when the TOKEN_LOCATION is headers
     app.config.setdefault("JWT_HEADER_NAME", "Authorization")
     app.config.setdefault("JWT_HEADER_TYPE", "Bearer")
-    app.config["MONGODB_SETTINGS"] = {"host": os.getenv("mongodb_uri")}
+    app.config["MONGODB_HOST"] = os.getenv("mongodb_uri")
     db.init_app(app)
     jwt.init_app(app)
     cors.init_app(app)
