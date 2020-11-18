@@ -4,6 +4,7 @@ from flask_jwt_extended import jwt_required
 from werkzeug.exceptions import NotFound
 
 from ..service.alternatif_service import AlternatifService
+from ..service.seleksi_service import Seleksi
 
 api = Namespace("alternatif", "Endpoint untuk alternatif")
 data_alternatif = api.model(
@@ -32,9 +33,55 @@ data_alternatif = api.model(
         ),
     },
 )
+data_seleksi = api.model(
+    "data_seleksi",
+    {
+        "_id": fields.String(
+            required=True,
+            description="NIM mahasiswa yang ditambahkan kedalam alternatif",
+        ),
+        "nama_mahasiswa": fields.String(
+            required=True,
+            description="Nama yang akan ditambahkan ke alternatif",
+        ),
+        "pendapatan_ortu": fields.String(
+            required=True,
+            description="Data pendapatan ortu alternatif"
+        ),
+        "tanggungan_ortu": fields.String(
+            required=True,
+            description="Data tanggungan ortu alternatif"
+        ),
+        "status_ortu": fields.String(
+            required=True,
+            description="Data status ortu alternatif"
+        ),
+        "semester": fields.String(
+            required=True,
+            description="Data semester alternatif"
+        ),
+        "ipk": fields.String(
+            required=True,
+            description="Data ipk alternatif"
+        ),
+    }
+)
 
 alternatif = AlternatifService()
+seleksi = Seleksi()
 
+@api.route('/data/seleksi')
+class SeleksiResource(Resource):
+    @api.doc(
+        responses={200: "OK", 400: "Bad Request"},
+        description="Endpoint untuk mengambil data seleksi",
+    )
+    @api.marshal_list_with(data_seleksi, envelope="data")
+    def get(self):
+        try:
+            return seleksi.seleksi()
+        except Exception as e:
+            api.abort(404, e)
 
 @api.route("/data")
 class AlternatifResourceAll(Resource):
