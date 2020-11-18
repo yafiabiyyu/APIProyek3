@@ -25,11 +25,16 @@ data_alternatif = api.model(
             required=True,
             description="Jenis kelamin yang akan ditambahkan ke alternatif",
         ),
-        "subkriteria_id": fields.List(fields.String(required=True, description="ID dari subkriteria"))
+        "subkriteria_id": fields.List(
+            fields.String(
+                required=True, description="ID dari subkriteria"
+            )
+        ),
     },
 )
 
 alternatif = AlternatifService()
+
 
 @api.route("/data")
 class AlternatifResourceAll(Resource):
@@ -49,6 +54,7 @@ class AlternatifResourceAll(Resource):
         except Exception as e:
             print(e)
             api.abort(400, e)
+
     @api.doc(
         responses={200: "OK", 400: "Bad Request"},
         description="Endpoint untuk mengambil seluruh data alternatif",
@@ -60,13 +66,38 @@ class AlternatifResourceAll(Resource):
         except Exception as e:
             api.abort(404, e)
 
-@api.route('/data/<nim>')
+
+@api.route("/data/<nim>")
 class AlternatifByNim(Resource):
     @api.doc(responses={200: "OK", 404: "Not Found"})
     @api.marshal_with(data_alternatif)
     def get(self, nim):
         DataAlternatifByNim = alternatif.get_alternatif_by_nim(nim)
-        if not DataAlternatifByNim:
-            raise NotFound("Data alternatif tidak ditemukan")
+        return DataAlternatifByNim
+        # if not DataAlternatifByNim:
+        #     raise NotFound("Data alternatif tidak ditemukan")
+        # else:
+        #     return DataAlternatifByNim
+
+    @api.doc(responses={200: "OK", 404: "Not Found"})
+    @api.expect(data_alternatif)
+    def put(self, nim):
+        try:
+            status, message = alternatif.update_alternatif(
+                nim, api.payload
+            )
+        except Exception as e:
+            api.abort(404, e)
         else:
-            return DataAlternatifByNim
+            if status:
+                return message
+            else:
+                return message
+
+    @api.doc(responses={200: "OK", 404: "Not Found"})
+    def delete(self, nim):
+        try:
+            data = alternatif.delete_alternatif(nim)
+            return jsonify(data)
+        except Exception as e:
+            api.abort(404, e)
