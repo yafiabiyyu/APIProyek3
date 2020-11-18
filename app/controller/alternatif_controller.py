@@ -45,32 +45,28 @@ data_seleksi = api.model(
             description="Nama yang akan ditambahkan ke alternatif",
         ),
         "pendapatan_ortu": fields.String(
-            required=True,
-            description="Data pendapatan ortu alternatif"
+            required=True, description="Data pendapatan ortu alternatif"
         ),
         "tanggungan_ortu": fields.String(
-            required=True,
-            description="Data tanggungan ortu alternatif"
+            required=True, description="Data tanggungan ortu alternatif"
         ),
         "status_ortu": fields.String(
-            required=True,
-            description="Data status ortu alternatif"
+            required=True, description="Data status ortu alternatif"
         ),
         "semester": fields.String(
-            required=True,
-            description="Data semester alternatif"
+            required=True, description="Data semester alternatif"
         ),
         "ipk": fields.String(
-            required=True,
-            description="Data ipk alternatif"
+            required=True, description="Data ipk alternatif"
         ),
-    }
+    },
 )
 
 alternatif = AlternatifService()
 seleksi = Seleksi()
 
-@api.route('/data/seleksi')
+
+@api.route("/data/seleksi")
 class SeleksiResource(Resource):
     @api.doc(
         responses={200: "OK", 400: "Bad Request"},
@@ -82,6 +78,7 @@ class SeleksiResource(Resource):
             return seleksi.seleksi()
         except Exception as e:
             api.abort(404, e)
+
 
 @api.route("/data")
 class AlternatifResourceAll(Resource):
