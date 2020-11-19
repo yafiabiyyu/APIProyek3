@@ -89,3 +89,26 @@ class KriteriaService:
         except Exception as e:
             message_object = {"status": "gagal", "message": e}
             return message_object
+    
+    def ambil_bobot(self):
+        id_kriteria = []
+        nama_kriteria = []
+        bobot_list = []
+        perbaikan_bobot = []
+        data_bobot = []
+        data_kriteria = KriteriaDoc.objects().all()
+        for data in range(0, len(data_kriteria)):
+            id_kriteria.append(data_kriteria[data]._id)
+            nama_kriteria.append(data_kriteria[data].nama_kriteria)
+            bobot_list.append(data_kriteria[data].bobot)
+        total_bobot = sum(bobot_list)
+        for i in range(0,len(bobot_list)):
+            perbaikan_bobot.append(bobot_list[i]/total_bobot)
+        for data in range(0, len(id_kriteria)):
+            dict_bobot = {
+                "_id":id_kriteria[data],
+                "nama_kriteria":nama_kriteria[data],
+                "bobot":perbaikan_bobot[data]
+            }
+            data_bobot.append(dict_bobot)
+        return data_bobot

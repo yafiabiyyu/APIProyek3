@@ -22,6 +22,21 @@ DataKriteria = api.model(
         ),
     },
 )
+
+DataBobot = api.model(
+    "data_bobot",
+    {
+        "_id": fields.String(readonly=True),
+        "nama_kriteria": fields.String(
+            required=True, description="Nama dari kriteria"
+        ),
+        "bobot": fields.Float(
+            required=True,
+            description="Bobot nilai dari setiap kriteria",
+        ),
+    },
+)
+
 kriteria = KriteriaService()
 
 
@@ -86,3 +101,12 @@ class KriteriaSpesificData(Resource):
                 return message
             else:
                 return message
+
+@api.route("/data/bobot")
+class BobotResource(Resource):
+    @api.marshal_list_with(DataBobot, envelope="data")
+    def get(self):
+        try:
+            return kriteria.ambil_bobot()
+        except Exception as e:
+            api.abort(400, e)
