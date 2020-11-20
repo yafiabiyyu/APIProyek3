@@ -28,7 +28,7 @@ def create_app(config_name):
     app.config["MONGODB_HOST"] = os.getenv("mongodb_uri")
     db.init_app(app)
     jwt.init_app(app)
-    cors.init_app(app)
+    cors.init_app(app, resources={r"/api/*": {"origins": "*"}})
 
     from app.models import auth_model, kriteria_model
 
