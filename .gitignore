@@ -6,4 +6,3 @@ migrations/
 app/service/metode_test.py
 *.sql
 data_gambar/
-metode/
