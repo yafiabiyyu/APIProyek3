@@ -102,6 +102,7 @@ class KriteriaSpesificData(Resource):
             else:
                 return message
 
+
 @api.route("/data/bobot")
 class BobotResource(Resource):
     @api.marshal_list_with(DataBobot, envelope="data")

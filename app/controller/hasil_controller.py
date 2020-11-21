@@ -8,6 +8,7 @@ from ..service.hasil_service import HasilService
 api = Namespace("hasil", "Endpoint untuk hasil")
 hasil = HasilService()
 
+
 @api.route("/data/konversi")
 class KonversiResource(Resource):
     @api.doc(
@@ -20,6 +21,7 @@ class KonversiResource(Resource):
             return hasil.get_konversi()
         except Exception as e:
             api.abort(400, e)
+
 
 @api.route("/data/normalisasi")
 class NormalisasiResource(Resource):
@@ -36,6 +38,7 @@ class NormalisasiResource(Resource):
         except Exception as e:
             api.abort(400, e)
 
+
 @api.route("/data/hasil/msaw")
 class MsawResource(Resource):
     @api.doc(
@@ -50,6 +53,7 @@ class MsawResource(Resource):
             return msaw
         except Exception as e:
             api.abort(400, e)
+
 
 @api.route("/data/hasil/saw")
 class sawResource(Resource):

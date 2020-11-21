@@ -2,6 +2,7 @@ from ..models.alternatif_model import AlternatifDoc
 from ..models.kriteria_model import KriteriaDoc, SubkriteriaDoc
 import scipy.stats as ss
 
+
 class DataMetode:
     def ambil_data(self):
         nama_alternatif = []
@@ -23,7 +24,7 @@ class DataMetode:
                 ).first()
                 data_nilai[data].append(nilai.nilai)
         return nim_alternatif, nama_alternatif, data_nilai
-    
+
     def perbaikan_data_bobot(self):
         data_bobot = KriteriaDoc.objects().only("bobot").all()
         perbaikan_bobot = []
@@ -50,7 +51,7 @@ class DataMetode:
             }
             data_konversi.append(dict_konversi)
         return data_konversi
-    
+
     def normalisasi_data(self):
         nim_data, nama_data, nilai_data = self.ambil_data()
         max_number = []
@@ -68,48 +69,56 @@ class DataMetode:
 
 class MSaw:
     def __init__(self):
-        self.data_metode = DataMetode()    
+        self.data_metode = DataMetode()
+
     def vector_data(self):
         bobot = self.data_metode.perbaikan_data_bobot()
         normalisasi_data = self.data_metode.normalisasi_data()
         vector_data_list = []
-        for data in range(0,len(normalisasi_data)):
+        for data in range(0, len(normalisasi_data)):
             vector_data_list.append([])
             for id in range(len(normalisasi_data[data])):
                 hasil_vector = normalisasi_data[data][id] ** bobot[id]
-                vector_data_list[data].append(round(hasil_vector,10))
+                vector_data_list[data].append(round(hasil_vector, 10))
         return vector_data_list
-    
+
     def jumlah_and_rank(self):
         data_vector = self.vector_data()
         jumlah = []
         hasil = []
         result = 1
-        for data in range(0,len(data_vector)):
+        for data in range(0, len(data_vector)):
             for id in range(len(data_vector[data])):
                 result = result * data_vector[data][id]
-            jumlah.append(round(result,10))
+            jumlah.append(round(result, 10))
             result = 1
-        for i in range(0,len(jumlah)):
-            hasil_itung = jumlah[i]/sum(jumlah)
-            hasil.append(round(hasil_itung,10))
+        for i in range(0, len(jumlah)):
+            hasil_itung = jumlah[i] / sum(jumlah)
+            hasil.append(round(hasil_itung, 10))
         rank = ss.rankdata([-1 * i for i in hasil]).astype(int).tolist()
         print(type(rank))
-        return rank,hasil
+        return rank, hasil
 
 
 class Saw:
     def __init__(self):
         self.data_metode = DataMetode()
+
     def jumlah_and_rank_saw(self):
         bobot = self.data_metode.perbaikan_data_bobot()
         data_normalisasi = self.data_metode.normalisasi_data()
         hasil_saw_list = []
         result = 0
-        for data in range(0,len(data_normalisasi)):
-            for id in range(0,len(data_normalisasi[data])):
-                result = (data_normalisasi[data][id] * bobot[id]) + result
-            hasil_saw_list.append(round(result,10))
+        for data in range(0, len(data_normalisasi)):
+            for id in range(0, len(data_normalisasi[data])):
+                result = (
+                    data_normalisasi[data][id] * bobot[id]
+                ) + result
+            hasil_saw_list.append(round(result, 10))
             result = 0
-        rank = ss.rankdata([-1 * i for i in hasil_saw_list]).astype(int).tolist()
-        return rank,hasil_saw_list
+        rank = (
+            ss.rankdata([-1 * i for i in hasil_saw_list])
+            .astype(int)
+            .tolist()
+        )
+        return rank, hasil_saw_list
