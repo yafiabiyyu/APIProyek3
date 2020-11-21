@@ -3,13 +3,13 @@ from flask_restplus import Resource, Namespace, fields
 from flask_jwt_extended import jwt_required
 from werkzeug.exceptions import NotFound, HTTPException
 
-from ..service.metode_service import MSaw
+from ..service.hasil_service import HasilService
 
 api = Namespace("hasil", "Endpoint untuk hasil")
-msaw = MSaw()
+hasil = HasilService()
 
 @api.route("/data/konversi")
-class KriteriaResource(Resource):
+class KonversiResource(Resource):
     @api.doc(
         responses={200: "OK", 400: "Bad Request"},
         description="Endpoint untuk ambil data konversi",
@@ -17,12 +17,12 @@ class KriteriaResource(Resource):
     # @api.marshal_list_with(DataKriteria, envelope="data")
     def get(self):
         try:
-            return msaw.normalisasi_data()
+            return hasil.get_konversi()
         except Exception as e:
             api.abort(400, e)
 
 @api.route("/data/normalisasi")
-class KriteriaResource(Resource):
+class NormalisasiResource(Resource):
     @api.doc(
         responses={200: "OK", 400: "Bad Request"},
         description="Endpoint untuk ambil data normalisasi",
@@ -30,29 +30,14 @@ class KriteriaResource(Resource):
     # @api.marshal_list_with(DataKriteria, envelope="data")
     def get(self):
         try:
-            normalisasi = msaw.normalisasi_api()
+            normalisasi = hasil.get_normalisasi()
             # print(normalisasi)
             return normalisasi
         except Exception as e:
             api.abort(400, e)
 
-@api.route("/data/vector")
-class KriteriaResource(Resource):
-    @api.doc(
-        responses={200: "OK", 400: "Bad Request"},
-        description="Endpoint untuk ambil data vector",
-    )
-    # @api.marshal_list_with(DataKriteria, envelope="data")
-    def get(self):
-        try:
-            vector = msaw.vector_data()
-            # print(normalisasi)
-            return vector
-        except Exception as e:
-            api.abort(400, e)
-
 @api.route("/data/hasil/msaw")
-class KriteriaResource(Resource):
+class MsawResource(Resource):
     @api.doc(
         responses={200: "OK", 400: "Bad Request"},
         description="Endpoint untuk ambil data msaw",
@@ -60,8 +45,8 @@ class KriteriaResource(Resource):
     # @api.marshal_list_with(DataKriteria, envelope="data")
     def get(self):
         try:
-            vector = msaw.jumlah_and_rank()
+            msaw = hasil.get_hasil_msaw()
             # print(normalisasi)
-            return vector
+            return msaw
         except Exception as e:
             api.abort(400, e)
