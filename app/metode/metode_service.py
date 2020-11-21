@@ -98,3 +98,18 @@ class MSaw:
         return rank,hasil
 
 
+class Saw:
+    def __init__(self):
+        self.data_metode = DataMetode()
+    def jumlah_and_rank_saw(self):
+        bobot = self.data_metode.perbaikan_data_bobot()
+        data_normalisasi = self.data_metode.normalisasi_data()
+        hasil_saw_list = []
+        result = 0
+        for data in range(0,len(data_normalisasi)):
+            for id in range(0,len(data_normalisasi[data])):
+                result = (data_normalisasi[data][id] * bobot[id]) + result
+            hasil_saw_list.append(round(result,10))
+            result = 0
+        rank = ss.rankdata([-1 * i for i in hasil_saw_list]).astype(int).tolist()
+        return rank,hasil_saw_list

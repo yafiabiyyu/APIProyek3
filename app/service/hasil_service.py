@@ -1,9 +1,10 @@
-from ..metode.metode_service import MSaw, DataMetode
+from ..metode.metode_service import MSaw, DataMetode, Saw
 
 class HasilService:
     def __init__(self):
         self.msaw = MSaw()
         self.data_metode = DataMetode()
+        self.saw = Saw()
     
     def get_konversi(self):
         data_konversi = []
@@ -36,6 +37,7 @@ class HasilService:
             }
             data_all_normalisasi.append(dict_normalisasi)
         return data_all_normalisasi
+        
     def get_hasil_msaw(self):
         hasil_msaw_list = []
         rank,hasil = self.msaw.jumlah_and_rank()
@@ -49,3 +51,17 @@ class HasilService:
             }
             hasil_msaw_list.append(dict_hasil)
         return hasil_msaw_list
+
+    def get_hasil_saw(self):
+        hasil_saw_list = []
+        rank,hasil = self.saw.jumlah_and_rank_saw()
+        nim_data, nama_data,_ = self.data_metode.ambil_data()
+        for data in range(0, len(nim_data)):
+            dict_hasil = {
+                "_id":nim_data[data],
+                "nama_mahasiswa":nama_data[data],
+                "nilai":hasil[data],
+                "rank":rank[data]
+            }
+            hasil_saw_list.append(dict_hasil)
+        return hasil_saw_list

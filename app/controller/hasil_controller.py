@@ -50,3 +50,18 @@ class MsawResource(Resource):
             return msaw
         except Exception as e:
             api.abort(400, e)
+
+@api.route("/data/hasil/saw")
+class sawResource(Resource):
+    @api.doc(
+        responses={200: "OK", 400: "Bad Request"},
+        description="Endpoint untuk ambil data saw",
+    )
+    # @api.marshal_list_with(DataKriteria, envelope="data")
+    def get(self):
+        try:
+            saw = hasil.get_hasil_saw()
+            # print(normalisasi)
+            return saw
+        except Exception as e:
+            api.abort(400, e)
